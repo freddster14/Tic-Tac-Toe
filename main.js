@@ -90,11 +90,11 @@ const gameBoard = (() => {
 
         if(roundWin() && player2.turn){
             player1.score++
-            playerTurn.textContent = player1.name + " Won this round.";
+            playerTurn.textContent = player1.name + " won this round.";
             
         }else if(roundWin()){
             player2.score++;
-            playerTurn.textContent = player2.name + " Won this round.";
+            playerTurn.textContent = player2.name + " won this round.";
             
         }else if(!board.includes(undefined) && board.length == 9){
             playerTurn.textContent = "It's a draw, go again.";
@@ -103,9 +103,9 @@ const gameBoard = (() => {
             roundOver = true
         }
         if(player1.turn == false && !roundWin()){
-            playerTurn.textContent = player2.name + " Turn";
+            playerTurn.textContent = player2.name + "'s Turn";
         }else if(player2.turn == false && !roundWin()){
-            playerTurn.textContent = player1.name + " Turn"
+            playerTurn.textContent = player1.name + "'s Turn"
         }
         
         announceDisplay.textContent = `${player1.score} - ${player2.score}`
@@ -156,7 +156,7 @@ const gameBoard = (() => {
         playerTurn.style.display = "block"
         if(xPlayerName.value != ''){player1.name = xPlayerName.value}
         if(oPlayerName.value != ''){player2.name = oPlayerName.value}
-        playerTurn.textContent = player1.name + " Turn"
+        playerTurn.textContent = player1.name + "'s Turn"
         document.querySelector('.name-container').style.display = 'none'
         if(roundNumber.value != "" && roundNumber.value != 0) rounds = roundNumber.value;
         roundNumber.style.display = "none"

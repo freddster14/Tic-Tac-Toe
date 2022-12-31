@@ -10,13 +10,13 @@
 <body>
     <h1>Tic-Tac-Toe</h1>
 
-    <p class="announce">Best of<input id="round-number" type="number"></p>
+    <p class="announce">Best of<input id="round-number" placeholder="3" min="1" max="99" type="number"></p>
     <p class="player-turn"></p>
     <div class="name-container">
         <label for="player1-name" class="player1-name">X's Name
-            <input id="player1-name" type="text"></label>
-        <label for="player1-name" class="player1-name">O's Name
-            <input id="player2-name" type="text"></label>
+            <input id="player1-name" class="name-input" type="text"></label>
+        <label for="player2-name" class="player2-name">O's Name
+            <input id="player2-name" class="name-input" type="text"></label>
     </div>
     <button id="start-btn">Start</button>
    

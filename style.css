@@ -1,3 +1,8 @@
+:root{
+    --text-shadow: 0px 0px 6px rgb(85, 255, 59);
+    --text-color: rgb(64, 236, 38);
+}
+
 * {
     margin: 0px;
     padding: 0px;
@@ -11,21 +16,66 @@ body {
     flex-flow: column;
     align-items: center;
     gap: 30px;
-    background-color: rgb(255, 255, 255);
+    background-image: linear-gradient(100deg, rgb(12, 12, 12), rgb(26, 26, 26));
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 }
 
 h1 {
     margin-top: 40px;
     font-size: 2.5em;
+    color: var(--text-color);
+    text-shadow: var(--text-shadow);
+}
+input {
+    background-color: rgb(33, 33, 33);
+    border-radius: 5px;
+    padding: 5px 0px;
+    text-align: center;
+    border: none;
+    font-size: 0.9em;
+    color: var(--text-color);
+    text-shadow: var(--text-shadow);
+}
+
+input:focus{
+    outline: 2px solid rgb(80, 80, 80);
+    background-color: rgb(53, 53, 53);
 }
 
 .announce {
     font-size: 1.7em;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: var(--text-color);
+    text-shadow: var(--text-shadow);
+}
+
+#round-number {width: 55px;}
+.name-input{width: 125px;}
+
+.name-container{
+    display: flex;
+    gap: 20px;
+    margin-top: 45px;
+    font-size: 1.4em;
+    color: var(--text-color);
+    text-shadow: var(--text-shadow);
+}
+.player1-name, .player2-name{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .player-turn {
     display: none;
     font-size: 1.4em;
+    color: var(--text-color);
+    text-shadow: var(--text-shadow);
 }
 
 .grid-container {
@@ -33,13 +83,19 @@ h1 {
     display: none;
     grid: repeat(3, 1fr)/ repeat(3, minmax(85px, 124px));
     gap: 14px;
-    background-color: black;
+    background-color: rgb(219, 219, 219);
+    box-shadow: 1px 2px 8px rgb(43, 43, 43);
+
 }
 
-.grid-squares {
+.grid-squares{
     width: 100%;
     height: 120px;
-    background-color: rgb(255, 255, 255);
+    background-image: linear-gradient(100deg, rgb(16, 16, 16), rgb(22, 22, 22));
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: var(--text-color);
+    text-shadow: var(--text-shadow);
     font-size: 105px;
     text-align: center;
     cursor: pointer;
@@ -49,21 +105,25 @@ h1 {
     gap: 30px;
 }
 
+#start-btn, #continue-btn, #restart-btn{
+    border: none;
+    background-color: var(--text-color);
+    color: rgb(34, 34, 34);
+    box-shadow: 1px 1px 6px rgb(85, 255, 59);
+    cursor: pointer;
+}
+
 #start-btn{
-    margin-top: 110px;
+    margin-top: 90px;
     font-size: 2em;
     padding: 5px 35px;
     border-radius: 10px;
-    border: none;
-    background-color: rgb(73, 73, 197);
-}
+} 
 
-#continue-btn, #restart-btn {
+#continue-btn, #restart-btn{
     display: none;
-    font-size: 1.7em;
-    padding: 7px 10px;
+    font-size: 1.65em;
+    margin: 10px 7px;
+    padding: 7px 15px;
     border-radius: 10px;
-    border: none;
-    background-color: rgb(132, 209, 209);
-    cursor: pointer;
 }
