@@ -5,21 +5,20 @@ const gameBoard = (() => {
     const xPlayerName = document.querySelector('#player1-name');
     const oPlayerName = document.querySelector('#player2-name');
     const gridContainer = document.querySelector('.grid-container');
-
+    const roundNumber = document.querySelector('#round-number')
 
 
     let board = []
+    let roundOver = false;
+    let rounds = 3
 
     const playerFactories = (name, mark, turn, score) => {
         return {name, mark, turn, score}
     }
     
-    const player1 = playerFactories("Player 1", "X", true, 0);
-    const player2 = playerFactories("Player 2", "O", false, 0)
+    const player1 = playerFactories("X", "X", true, 0);
+    const player2 = playerFactories("O", "O", false, 0)
     
-    let mouseDown = false;
-    document.body.onmousedown = () => (mouseDown = true);
-    document.body.onmouseup = () => (mouseDown = false);
 
 
     const winCombos = [
@@ -33,71 +32,108 @@ const gameBoard = (() => {
         [0,4,8]
     ];
 
-    const validateWin = () => {
-        let gameWon = false;
+    const roundWin = () => {
         for(winCombo of winCombos){
             let a = board[winCombo[0]];
             let b = board[winCombo[1]];
             let c = board[winCombo[2]];
             if (a === b && b === c && a != undefined) {
-                gameWon = true;
+                roundOver = true;
             }
         }
+        return roundOver
+    }
+
+
+    const gameWinner = () => {
+        let gameWon = false
+        if(player1.score == rounds){
+            playerTurn.textContent = `${player1.name} destroyed ${player2.name}`
+            gameWon = true
+        }else if(player2.score == rounds){
+            playerTurn.textContent = `${player2.name} outplayed ${player1.name}`
+            gameWon = true
+        }
+
         return gameWon
     }
 
-    
-
     const turnAndScore = () => {
         const continueBtn = document.querySelector('#continue-btn');
-        const restartBtn = document.querySelector('#restart-btn');
-
+        const arrayBoard = [...document.querySelectorAll(".grid-squares")];
+        if(gameWinner()) return;
         continueBtn.addEventListener('click', () => {
-            gridContainer.innerHTML = ''
+            arrayBoard.forEach(e => e.textContent = "");
+            roundOver = false;
+            board = []
+            turnAndScore();
+            continueBtn.style.display = "none";
+            restartBtn.style.display = "none";
         })
-        if(){
-            playerTurn.textContent = "It's a draw, go again."
-            continueBtn.style.display = "block"
-            restartBtn.style.display = "block"
-        }else if(validateWin() && player2.turn){
+
+        const restartBtn = document.querySelector('#restart-btn');
+        restartBtn.addEventListener('click', () => {
+            player1.score = 0;
+            player2.score = 0;
+            player1.turn = true;
+            player2.turn = false;
+            arrayBoard.forEach(e => e.textContent = "");
+            roundOver = false;
+            board = []
+            turnAndScore();
+            continueBtn.style.display = "none";
+            restartBtn.style.display = "none";
+            announceDisplay.textContent = `Best of ${rounds}`
+        })
+        
+       
+
+        if(roundWin() && player2.turn){
             player1.score++
-            validateWin.gameWon = false
-            playerTurn.textContent = player1.name + " Won this round."
-            continueBtn.style.display = "block"
-            restartBtn.style.display = "block"
-        }else if(validateWin()){
+            playerTurn.textContent = player1.name + " Won this round.";
+            
+        }else if(roundWin()){
             player2.score++;
-            validateWin.gameWon = false;
-            playerTurn.textContent = player2.name + " Won this round."
-            continueBtn.style.display = "block"
-            restartBtn.style.display = "block"
+            playerTurn.textContent = player2.name + " Won this round.";
+            
+        }else if(!board.includes(undefined) && board.length == 9){
+            playerTurn.textContent = "It's a draw, go again.";
+            continueBtn.style.display = "block";
+            restartBtn.style.display = "block";
+            roundOver = true
         }
-
-        if(player1.turn == false && !validateWin()){
-            playerTurn.textContent = player2.name + " Turn"
-
-        }else if(player2.turn == false && !validateWin()){
-            playerTurn.textContent = player1.name + " Turn"}
-    announceDisplay.textContent = `${player1.score} - ${player2.score}`
-
+        if(player1.turn == false && !roundWin()){
+            playerTurn.textContent = player2.name + " Turn";
+        }else if(player2.turn == false && !roundWin()){
+            playerTurn.textContent = player1.name + " Turn"
+        }
+        
+        announceDisplay.textContent = `${player1.score} - ${player2.score}`
+        gameWinner();
+        if(roundWin() && !gameWinner()){
+            continueBtn.style.display = "block";
+            restartBtn.style.display = "block";
+        }else if(roundWin() && gameWinner()){restartBtn.style.display = "block"}
     }
 
     const markDown = (e) => {
-        if(mouseDown) return;
-        if(validateWin()) return;
-        if(e.target.textContent == '' && player1.turn && !validateWin()){
+        if(roundWin()) return;
+        if(gameWinner()) return;
+        if(e.target.textContent == '' && player1.turn && !roundWin()){
             e.target.textContent = player1.mark
             board[e.target.id] = player1.mark
             player1.turn = false
             player2.turn = true
-        }else if(e.target.textContent == '' && player2.turn && !validateWin()){
+        }else if(e.target.textContent == '' && player2.turn && !roundWin()){
             e.target.textContent = player2.mark
             board[e.target.id] = player2.mark
             player1.turn = true
             player2.turn = false
         }
-        validateWin();
-        turnAndScore();
+        roundWin();
+        if(!gameWinner()) turnAndScore();
+        
+        
     }
 
     const displayArray = () => {
@@ -112,7 +148,7 @@ const gameBoard = (() => {
             ghostContainer.appendChild(div)
             div.addEventListener('mousedown', markDown);
         }
-    gridContainer.appendChild(ghostContainer);
+        gridContainer.appendChild(ghostContainer);
     }
 
     const startGame = () => {
@@ -122,15 +158,14 @@ const gameBoard = (() => {
         if(oPlayerName.value != ''){player2.name = oPlayerName.value}
         playerTurn.textContent = player1.name + " Turn"
         document.querySelector('.name-container').style.display = 'none'
+        if(roundNumber.value != "" && roundNumber.value != 0) rounds = roundNumber.value;
+        roundNumber.style.display = "none"
+        announceDisplay.textContent = `Best of ${rounds}`
     }
 
     startBtn.addEventListener('click', () => {
         startGame();
         displayArray(board);
-
     })
-
-    
-    
 })();
 
