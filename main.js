@@ -2,25 +2,20 @@ const gameBoard = (() => {
     const playerTurn = document.querySelector('.player-turn');
     const startBtn = document.querySelector('#start-btn');
     const announceDisplay = document.querySelector('.announce');
-    const xPlayerName = document.querySelector('#player1-name');
-    const oPlayerName = document.querySelector('#player2-name');
     const gridContainer = document.querySelector('.grid-container');
-    const roundNumber = document.querySelector('#round-number')
+    const announceWinner = document.querySelector('.announce-winner');
 
-
-    let board = []
+    let board = [];
     let roundOver = false;
-    let rounds = 3
+    let rounds = 3;
 
     const playerFactories = (name, mark, turn, score) => {
         return {name, mark, turn, score}
     }
     
     const player1 = playerFactories("X", "X", true, 0);
-    const player2 = playerFactories("O", "O", false, 0)
+    const player2 = playerFactories("O", "O", false, 0);
     
-
-
     const winCombos = [
         [0,1,2],
         [0,3,6],
@@ -44,14 +39,19 @@ const gameBoard = (() => {
         return roundOver
     }
 
-
     const gameWinner = () => {
         let gameWon = false
         if(player1.score == rounds){
             playerTurn.textContent = `${player1.name} destroyed ${player2.name}`
+            pointDifference = player1.score - player2.score
+            announceWinner.textContent = `${player1.name} wins by ${pointDifference} rounds! Try again ${player2.name}!`
+            gridContainer.style.display = "none"
+            announceWinner.style.display = "block"
             gameWon = true
         }else if(player2.score == rounds){
             playerTurn.textContent = `${player2.name} outplayed ${player1.name}`
+            gridContainer.style.display = "none"
+            announceWinner.style.display = "block"
             gameWon = true
         }
 
@@ -84,10 +84,11 @@ const gameBoard = (() => {
             continueBtn.style.display = "none";
             restartBtn.style.display = "none";
             announceDisplay.textContent = `Best of ${rounds}`
+            if(!gameWinner()) {gridContainer.style.display = "grid"
+            announceWinner.style.display = "none"
+            }
         })
         
-       
-
         if(roundWin() && player2.turn){
             player1.score++
             playerTurn.textContent = player1.name + " won this round.";
@@ -131,9 +132,7 @@ const gameBoard = (() => {
             player2.turn = false
         }
         roundWin();
-        if(!gameWinner()) turnAndScore();
-        
-        
+        if(!gameWinner()) turnAndScore();  
     }
 
     const displayArray = () => {
@@ -152,6 +151,10 @@ const gameBoard = (() => {
     }
 
     const startGame = () => {
+        const xPlayerName = document.querySelector('#player1-name');
+        const oPlayerName = document.querySelector('#player2-name');
+        const roundNumber = document.querySelector('#round-number');
+
         startBtn.style.display = "none"
         playerTurn.style.display = "block"
         if(xPlayerName.value != ''){player1.name = xPlayerName.value}
