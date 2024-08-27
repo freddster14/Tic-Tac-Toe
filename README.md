@@ -1,6 +1,6 @@
 # Tic-Tac-Toe
 
-Live Preview: [Click Here](https://zeronicc.github.io/Tic-Tac-Toe/)
+Live Preview: [Click Here](https://freddster14.github.io/Tic-Tac-Toe/)
 ## Technologies Used
 
 * JavaScript (ES6)
